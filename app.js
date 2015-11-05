@@ -10,8 +10,8 @@ var express = require('express'),
 	logger = require('./middleware/log'),
 	bodyParser = require('body-parser'),
 	csrf = require('csurf'),
-	httpErr = require('./middleware/errorHandlers'),
-	utils = require('./middleware//utils'),
+	httpErr = require('./middleware/http-errors'),
+	utils = require('./middleware/utils'),
 	config = require('./config');
 
 process.on('uncaughtException', function(err) {
@@ -57,8 +57,8 @@ app.post(config.routes.login, routes.loginProcess);
 app.get('/chat', [utils.requireAuth], routes.chat);
 app.get(config.routes.logout, routes.logout);
 
-app.use(httpErr.notFound);
-app.use(httpErr.serverErr);
+app.use(httpErr.notfound);
+app.use(httpErr.svrerror);
 
 http.createServer(app).listen(config.port, function() {
 	console.log('HTTP Server listening on %d.', config.port);
