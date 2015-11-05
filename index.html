@@ -1,0 +1,47 @@
+<head>
+	<title>Ping Pong</title>
+	<script type="text/javascript" src="socket.io.js"></script>
+	<script type="text/javascript"
+	src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
+</head>
+<input type="text" id="username">
+<button id="ping">Ping</button>
+<div id="sent"></div>
+<ul id="info">
+</ul>
+
+
+<script>
+	var socket = io('http://192.168.75.129:4000/');
+	var uname = $('#username');
+	var pingbtn = $('#ping');
+	var infoSec = $('#info');
+
+
+	function addLi(message) {
+		infoSec.append($("<li>").text(message));
+	}
+
+	uname.on('change', function() {
+		socket.emit('join',{username: uname.val()});
+	});
+
+	var pingSent = 0;
+	pingbtn.on('click', function() {
+		socket.emit('ping', null, function(ack) {
+			if(ack == 'ack') {
+				pingSent++;
+				$('#sent').html('Pings sent: ' + pingSent);
+			}
+		});
+	});
+
+	socket.on('userJoined', function(data) {
+		addLi(data.username + ' just joined.');
+	});
+
+
+	socket.on('ping', null, function(data){
+		addLi(data.username + ' has pinged!');
+	});
+</script>
