@@ -38,7 +38,8 @@ app.use(session({
 	resave: false,
 	saveUninitialized: true,
 	store: new RedisStore({
-		url: config.redisUrl
+		host: config.redisHost,
+		port: config.redisPort
 	})
 }));
 
@@ -69,12 +70,20 @@ var io = require('socket.io')(config.sckport);
 
 io.on('connection', function(socket) {
 	socket.on('join', function(data) {
-		io.sockets.emit('userJoined',data);
+		socket.broadcast.emit('userJoined', data);
 		socket.username = data.username;
 	})
 
 	socket.on('ping', function(data, callback) {
-		io.sockets.emit('ping', {username: socket.username});
+		socket.broadcast.emit('ping', {
+			username: socket.username
+		});
 		callback('ack');
+	});
+
+	socket.on('disconnect', function() {
+		socket.broadcast.emit('userDisconnect', {
+			username: socket.username
+		});
 	});
 });

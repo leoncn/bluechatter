@@ -1,7 +1,8 @@
 module.exports = {
 	port: 3000,
 	secret: 'secret',
-	redisUrl: 'redis://localhost',
+	redisHost : 'localhost',
+	redisPort: 6379,
 	routes: {
 		login: '/login',
 		logout: '/logout'
