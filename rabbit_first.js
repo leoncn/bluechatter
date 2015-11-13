@@ -1,16 +1,34 @@
 var http = require('http'),
-	amqp = require('amqp'),
-	rabbit = amqp.createConnection();
+	q = require('q'),
+	_ = require('lodash'),
+	// amqp = require('amqp'),
+	// rabbit = amqp.createConnection();
+	rabbit = require('./queue/rabbit');
 
 
-rabbit.on('ready', function() {
-	rabbit.exchange('first-exchange', {
-		type: 'direct',
-		autoDelete: false
-	}, function(ex) {
+// rabbit.on('ready', function() {
+// 	rabbit.exchange('first-exchange', {
+// 		type: 'direct',
+// 		autoDelete: false
+// 	}, function(ex) {
+// 		startServer(ex);
+// 	});
+// });
+
+rabbit
+	.then(function(rabbit) {
+		return q.Promise(function(reslove, reject, notify) {
+			rabbit.exchange('first-exchange', {
+				type: 'direct',
+				autoDelete: false
+			}, function(ex) {
+				reslove(ex);
+			});
+		});
+	})
+	.then(function(ex) {
 		startServer(ex);
-	});
-});
+	}).done();
 
 
 function startServer(ex) {

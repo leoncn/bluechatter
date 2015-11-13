@@ -7,5 +7,10 @@ module.exports = {
 		login: '/login',
 		logout: '/logout'
 	},
-	sckport : 4000
+	sckport : 4000,
+
+	rabbitMQ : {
+		URL : 'amqp://guest:gest@localhost:5672',
+		exchange : 'chat.log'
+	}
 }

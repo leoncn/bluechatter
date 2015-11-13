@@ -49,7 +49,7 @@ if (cluster.isMaster) {
 	rabbit.on('ready', function() {
 		console.log('connected to MQ successfully.');
 		//fork workers
-		var numCPUs = 1; //os.cpus().length;
+		var numCPUs = os.cpus().length;
 
 		for (var i = 0; i < numCPUs; i++) {
 			cluster.fork();
