@@ -1,12 +1,19 @@
 var amqp = require('amqp'),
 	config = require('../config'),
-	q = require('q');
+	q = require('q'),	
+	_ = require('lodash');
 
 
-module.exports = q.Promise(function(resolve, reject, notify) {
+module.exports = function() {
 	var rabbit = amqp.createConnection(config.rabbitMQ.URL);
+	var deferred = q.defer();
 
 	rabbit.on('ready', function() {
-		resolve(rabbit);
+		deferred.resolve(rabbit);
+		console.log('connect to rabbit.');
 	});
-});
+
+	rabbit.on('error', _.flowRight(deferred.reject, console.error));
+
+	return deferred.promise;
+};

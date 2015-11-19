@@ -1,7 +1,17 @@
+var log = require('./log');
+
+
 exports.notfound = function(req, res, next) {
 	return function(req, res, next) {
-		res.status(404).send( "Reqested URL " + req.url + " is not available.");
+		log.error({
+			error: {
+				'404': req.url
+			},
+			ts: Date.now()
+		});
+		res.status(404).send("Reqested URL " + req.url + " is not available.");
 		res.end();
+
 	}
 }
 

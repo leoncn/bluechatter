@@ -4,13 +4,11 @@ var rabbitPromise = require('./rabbit'),
 
 
 module.exports = q.Promise(function(reslove, reject, notify) {
-	rabbitPromise
+	rabbitPromise()
 		.then(function(rabbit) {
-			rabbit.exchange(config.rabbitMQ.exchange, {
-					type: 'topic',
-					autoDelete: false
-				},
+			rabbit.exchange(config.rabbitMQ.exchange, config.rabbitMQ.exchange_options,
 				function(ex) {
+					console.log('connect to exchange %s', config.rabbitMQ.exchange)
 					setupQueue(rabbit);
 					reslove(ex);
 				});
@@ -27,6 +25,7 @@ function initQueue(rabbit, qname, bindingkey) {
 	rabbit.queue(qname, {
 		autoDelete: false
 	}, function(q) {
+		console.log('binding %s to %s with key %s', qname, config.rabbitMQ.exchange, bindingkey )
 		q.bind(config.rabbitMQ.exchange, bindingkey);
 	});
 }
