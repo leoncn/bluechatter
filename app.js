@@ -47,7 +47,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: false
 }));
-app.use(logger());
+app.use(logger.express());
 app.use(csrf());
 app.use(utils.csrf());
 app.use(utils.authenticated());
@@ -58,8 +58,8 @@ app.post(config.routes.login, routes.loginProcess);
 app.get('/chat', [utils.requireAuth], routes.chat);
 app.get(config.routes.logout, routes.logout);
 
-app.use(httpErr.notfound);
-app.use(httpErr.svrerror);
+app.use(httpErr.notfound());
+app.use(httpErr.svrerror());
 
 http.createServer(app).listen(config.port, function() {
 	console.log('HTTP Server listening on %d.', config.port);

@@ -7,7 +7,7 @@ module.exports = q.Promise(function(reslove, reject, notify) {
 	rabbitPromise
 		.then(function(rabbit) {
 			rabbit.exchange(config.rabbitMQ.exchange, {
-					type: 'topic';
+					type: 'topic',
 					autoDelete: false
 				},
 				function(ex) {
@@ -19,8 +19,8 @@ module.exports = q.Promise(function(reslove, reject, notify) {
 });
 
 function setupQueue(rabbit) {
-	initQueue(rabbit, 'debug.log', '*.log');
-	initQueue(rabbit, 'error.log', 'error.log');
+	initQueue(rabbit, 'debug.log', '*');
+	initQueue(rabbit, 'error.log', 'error');
 }
 
 function initQueue(rabbit, qname, bindingkey) {
