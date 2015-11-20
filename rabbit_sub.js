@@ -14,7 +14,8 @@ if (params.length < 4) {
 
 var qname = params[2],
 	exname = params[3],
-	bindingkey = params[4];
+	//bindingkey = params[4];
+	bindingkeys = params.slice(4);
 
 
 
@@ -64,17 +65,19 @@ function checkExExists() {
 
 
 function bindQueue() {
+
 	var deferred = Q.defer();
+
 	rabbit.queue(
 		qname, {
 			autoDelete: false
 		},
-		function(mq) {
-			mq.bind(exname, bindingkey, function() {
-				deferred.resolve(mq);
-				console.log('bind %s to %s with key %s', qname, exname, bindingkey);
-			});
 
+		function(mq) {
+			bindingkeys.forEach(function(key, idx) {
+				mq.bind(exname, key, deferred.resolve);
+				console.log('bind %s to %s with key %s', qname, exname, key);
+			});
 		});
 
 	return deferred.promise;

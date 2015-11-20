@@ -27,5 +27,6 @@ function initQueue(rabbit, qname, bindingkey) {
 	}, function(q) {
 		console.log('binding %s to %s with key %s', qname, config.rabbitMQ.exchange, bindingkey )
 		q.bind(config.rabbitMQ.exchange, bindingkey);
+		q.close();
 	});
 }

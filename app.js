@@ -10,6 +10,7 @@ var express = require('express'),
 	logger = require('./middleware/log'),
 	bodyParser = require('body-parser'),
 	csrf = require('csurf'),
+	redis = require('redis'),
 	httpErr = require('./middleware/http-errors'),
 	utils = require('./middleware/utils'),
 	config = require('./config');
